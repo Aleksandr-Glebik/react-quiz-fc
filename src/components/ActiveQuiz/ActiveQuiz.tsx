@@ -7,11 +7,12 @@ import { QuestionType } from '../../pages/Quiz/Quiz'
 interface ActiveQuizType {
     quiz: QuestionType
     quizeslength: number
+    onAnswerClick: (answerId: number) => void
 }
 
 
-const ActiveQuiz: React.FC<ActiveQuizType> = ( { quiz, quizeslength } ) => {
-    console.log('quiz', quiz);
+const ActiveQuiz: React.FC<ActiveQuizType> = ( { quiz, quizeslength, onAnswerClick } ) => {
+  console.log('quiz', quiz);
 
   return (
     <div className={styles.activeQuiz}>
@@ -22,7 +23,10 @@ const ActiveQuiz: React.FC<ActiveQuizType> = ( { quiz, quizeslength } ) => {
             </span>
             <small>{quiz.idQuestion} из {quizeslength}</small>
         </p>
-        <AnswersList answers={quiz.answers}/>
+        <AnswersList
+          answers={quiz.answers}
+          onAnswerClick={onAnswerClick}
+        />
     </div>
   )
 }

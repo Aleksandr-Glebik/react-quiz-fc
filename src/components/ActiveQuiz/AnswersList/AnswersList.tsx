@@ -10,9 +10,10 @@ type AnswerType = {
 
 interface AnswersType {
     answers: AnswerType[]
+    onAnswerClick: (answerId: number) => void
 }
 
-const AnswersList: React.FC<AnswersType> = ( { answers } ) => {
+const AnswersList: React.FC<AnswersType> = ( { answers, onAnswerClick } ) => {
   return (
     <ul className={styles.list}>
         {
@@ -20,6 +21,8 @@ const AnswersList: React.FC<AnswersType> = ( { answers } ) => {
             <AnswersItem
               key={item.id.toString()}
               item={item.text}
+              id={item.id}
+              onAnswerClick={onAnswerClick}
             />
           ))
         }

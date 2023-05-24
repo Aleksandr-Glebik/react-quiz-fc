@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import styles from './Quiz.module.scss'
 import ActiveQuiz from '../../components/ActiveQuiz/ActiveQuiz'
 
@@ -10,6 +10,7 @@ export type AnswerType = {
 export type QuestionType = {
     idQuestion: number
     question: string
+    rightAnswerId: number
     answers: AnswerType[]
 }
 
@@ -22,42 +23,97 @@ const Quiz: React.FC = () => {
     quiz: [
         {
             idQuestion: 1,
-            question: 'Как дела?',
+            question: 'Какого цвета солнце?',
+            rightAnswerId: 1,
             answers: [
                 {
                     id: 1,
-                    text: '1. Хорошо'
+                    text: '1. Желтый'
                 },
                 {
                     id: 2,
-                    text: '2. Плохо'
+                    text: '2. Зеленый'
                 },
                 {
                     id: 3,
-                    text: '3. Не очень'
+                    text: '3. Красный'
                 },
                 {
                     id: 4,
-                    text: '4. Бывало и лучше'
+                    text: '4. Черный'
                 },
                 {
                     id: 5,
-                    text: '5. Супер'
+                    text: '5. Белый'
                 },
             ]
-        }
+        },
+        {
+            idQuestion: 2,
+            question: 'Какого цвета небо?',
+            rightAnswerId: 3,
+            answers: [
+                {
+                    id: 1,
+                    text: '1. Желтый'
+                },
+                {
+                    id: 2,
+                    text: '2. Зеленый'
+                },
+                {
+                    id: 3,
+                    text: '3. Синий'
+                },
+                {
+                    id: 4,
+                    text: '4. Черный'
+                },
+                {
+                    id: 5,
+                    text: '5. Белый'
+                },
+            ]
+        },
     ]
+  }
+
+  const [activeQuestionId, setActiveQuestionId] = useState(1)
+  let activeQuestion = state.quiz.find(item => item.idQuestion === activeQuestionId)
+
+  const isQuizFinished = () => {
+    return activeQuestion && state.quiz.length > activeQuestion.idQuestion
+  }
+
+  const onAnswerClickHandler = (answerId: number) => {
+    console.log('answerId', answerId)
+    const timeout = window.setTimeout( () => {
+        if (answerId === activeQuestion?.rightAnswerId) {
+            alert('right')
+        } else {
+            alert('wrong')
+        }
+        if (isQuizFinished()) {
+            setActiveQuestionId(prev => prev + 1)
+        } else {
+            alert('quiz finished')
+        }
+      window.clearTimeout(timeout)
+    }, 750)
   }
 
   return (
     <div className={styles.quiz}>
-        <h1 className={styles.h1}>Quiz</h1>
+        <h1 className={styles.h1}>Ответьте на все вопросы</h1>
 
         <div className={styles.quizWrapper}>
-            <ActiveQuiz
-              quiz={state.quiz[0]}
-              quizeslength={state.quiz.length}
-            />
+            {
+              activeQuestion && <ActiveQuiz
+                quiz={activeQuestion}
+                quizeslength={state.quiz.length}
+                onAnswerClick={onAnswerClickHandler}
+              />
+            }
         </div>
     </div>
   )
