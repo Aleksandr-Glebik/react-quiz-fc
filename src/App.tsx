@@ -1,12 +1,12 @@
 import React from 'react'
 import Layout from './hoc/Layout/Layout'
+import Quiz from './pages/Quiz/Quiz'
 
 
 function App() {
   return (
     <Layout>
-      <h1>Start project</h1>
-
+      <Quiz />
     </Layout>
   )
 }

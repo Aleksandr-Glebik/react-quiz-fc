@@ -1,0 +1,20 @@
+.quiz {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    flex-grow: 1;
+    background: rgb(12,207,200);
+    background: linear-gradient(0deg, rgba(12,207,200,1) 0%, rgba(71,129,246,1) 100%);
+}
+
+.h1 {
+    font-family: 'Open Sans', sans-serif;
+    color: #fff;
+}
+
+.quizWrapper {
+    width: 600px;
+    align-self: center;
+}
