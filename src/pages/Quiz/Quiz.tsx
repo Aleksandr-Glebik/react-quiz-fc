@@ -85,7 +85,7 @@ const Quiz: React.FC = () => {
     return activeQuestion && state.quiz.length > activeQuestion.idQuestion
   }
 
-  const onAnswerClickHandler = (answerId: number) => {
+  const onAnswerClickHandler = (answerId: number | null) => {
     console.log('answerId', answerId)
     const timeout = window.setTimeout( () => {
         if (answerId === activeQuestion?.rightAnswerId) {
@@ -98,8 +98,8 @@ const Quiz: React.FC = () => {
         } else {
             alert('quiz finished')
         }
-      window.clearTimeout(timeout)
-    }, 750)
+        window.clearTimeout(timeout)
+    }, 1000)
   }
 
   return (
@@ -110,8 +110,9 @@ const Quiz: React.FC = () => {
             {
               activeQuestion && <ActiveQuiz
                 quiz={activeQuestion}
-                quizeslength={state.quiz.length}
+                quizesLength={state.quiz.length}
                 onAnswerClick={onAnswerClickHandler}
+                rightAnswerId={activeQuestion?.rightAnswerId}
               />
             }
         </div>

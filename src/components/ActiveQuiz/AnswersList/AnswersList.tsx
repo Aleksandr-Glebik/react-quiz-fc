@@ -7,13 +7,13 @@ type AnswerType = {
     id: number
     text: string
 }
-
 interface AnswersType {
     answers: AnswerType[]
+    rightAnswerId: number
     onAnswerClick: (answerId: number) => void
 }
 
-const AnswersList: React.FC<AnswersType> = ( { answers, onAnswerClick } ) => {
+const AnswersList: React.FC<AnswersType> = ( { answers, onAnswerClick, rightAnswerId } ) => {
   return (
     <ul className={styles.list}>
         {
@@ -23,6 +23,7 @@ const AnswersList: React.FC<AnswersType> = ( { answers, onAnswerClick } ) => {
               item={item.text}
               id={item.id}
               onAnswerClick={onAnswerClick}
+              rightAnswerId={rightAnswerId}
             />
           ))
         }

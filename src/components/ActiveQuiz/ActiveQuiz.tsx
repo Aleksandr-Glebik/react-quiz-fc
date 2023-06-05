@@ -3,17 +3,14 @@ import styles from './ActiveQuiz.module.scss'
 import AnswersList from './AnswersList/AnswersList'
 
 import { QuestionType } from '../../pages/Quiz/Quiz'
-
 interface ActiveQuizType {
     quiz: QuestionType
-    quizeslength: number
+    quizesLength: number
+    rightAnswerId: number
     onAnswerClick: (answerId: number) => void
 }
 
-
-const ActiveQuiz: React.FC<ActiveQuizType> = ( { quiz, quizeslength, onAnswerClick } ) => {
-  console.log('quiz', quiz);
-
+const ActiveQuiz: React.FC<ActiveQuizType> = ( { quiz, quizesLength, onAnswerClick, rightAnswerId } ) => {
   return (
     <div className={styles.activeQuiz}>
         <p className={styles.question}>
@@ -21,11 +18,12 @@ const ActiveQuiz: React.FC<ActiveQuizType> = ( { quiz, quizeslength, onAnswerCli
                 <strong>{quiz.idQuestion}.</strong>&nbsp;
                 {quiz.question}
             </span>
-            <small>{quiz.idQuestion} из {quizeslength}</small>
+            <small>{quiz.idQuestion} из {quizesLength}</small>
         </p>
         <AnswersList
           answers={quiz.answers}
           onAnswerClick={onAnswerClick}
+          rightAnswerId={rightAnswerId}
         />
     </div>
   )
