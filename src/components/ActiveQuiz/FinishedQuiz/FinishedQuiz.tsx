@@ -2,10 +2,13 @@ import React from 'react'
 import styles from './FinishedQuiz.module.scss'
 import clsx from 'clsx'
 import { answerStateType, QuestionType } from '../../../pages/Quiz/Quiz'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faXmark, faCheck } from '@fortawesome/free-solid-svg-icons'
 
 interface FinishedQuizType {
   answerState: answerStateType[]
   quiz: QuestionType[]
+  onRetry: () => void
 }
 
 type resultType = {
@@ -14,7 +17,7 @@ type resultType = {
   status: string
 }
 
-const FinishedQuiz: React.FC<FinishedQuizType> = ({ answerState, quiz }) => {
+const FinishedQuiz: React.FC<FinishedQuizType> = ({ answerState, quiz, onRetry }) => {
   console.log('answerState', answerState)
   console.log('quiz', quiz)
   let result: resultType[] = quiz.map((el, ind) => {
@@ -40,11 +43,17 @@ const FinishedQuiz: React.FC<FinishedQuizType> = ({ answerState, quiz }) => {
               key={`${item}_${ind}`}
               className={styles.text}
             >
-              <strong>{item.idQuestion}. </strong>
+              <strong>{item.idQuestion}.&nbsp;</strong>
               <span className={clsx(item.status === 'success'
                   ? styles.success
                   : styles.error
               )}>{item.question}</span>
+              <FontAwesomeIcon
+                icon={item.status === 'success' ? faCheck : faXmark}
+                className={clsx(styles.icon, item.status === 'success'
+                  ? styles.success
+                  : styles.error
+              )} />
             </li>
           ))
         }
@@ -52,6 +61,14 @@ const FinishedQuiz: React.FC<FinishedQuizType> = ({ answerState, quiz }) => {
       <p className={styles.rightAnswer}>
         Правильных ответов {rightAnswerLength} из {result.length}
       </p>
+      <div>
+        <button
+          className={clsx(styles.btn)}
+          onClick={onRetry}
+        >
+          Повторить
+        </button>
+      </div>
     </div>
   )
 }

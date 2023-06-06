@@ -129,6 +129,12 @@ const Quiz: React.FC = () => {
     }, 1000)
   }
 
+  const onRetryHandler = () => {
+    setIsFinished(false)
+    setAnswerState([])
+    setActiveQuestionId(1)
+  }
+
   return (
     <div className={styles.quiz}>
         <h1 className={styles.h1}>
@@ -142,7 +148,11 @@ const Quiz: React.FC = () => {
         <div className={styles.quizWrapper}>
           {
             isFinished
-             ? <FinishedQuiz answerState={answerState} quiz={state.quiz} />
+             ? <FinishedQuiz
+                 answerState={answerState}
+                 quiz={state.quiz}
+                 onRetry={onRetryHandler}
+               />
              : activeQuestion
                 && <ActiveQuiz
                   quiz={activeQuestion}

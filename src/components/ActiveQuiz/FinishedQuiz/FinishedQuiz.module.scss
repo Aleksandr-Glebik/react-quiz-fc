@@ -2,6 +2,8 @@
     width: 100%;
     padding: 20px;
     margin-top: 15px;
+    border: 2px solid #fff;
+    border-radius: 5px;
 
     .list {
         list-style-type: none;
@@ -21,11 +23,34 @@
     margin-top: 15px;
 }
 
+.icon {
+    font-size: 22px;
+    color: #fff;
+    margin-left: 10px;
+}
 .success {
     color: greenyellow;
 }
 
 .error {
     color: rgb(197, 0, 0);
+}
+
+.btn {
+    border: none;
+    background-color: inherit;
+    padding: 5px 10px;
+    margin-top: 15px;
+    border-radius: 5px;
+    border: 1px solid #fff;
+    font-family: 'Open Sans', sans-serif;
+    font-size: 14px;
+    color: #fff;
+    cursor: pointer;
+    transition: all ease-in-out 0.35s;
+
+    &:hover {
+        background-color: rgba(255, 255, 255, 0.2);
+    }
 }
 
