@@ -1,0 +1,31 @@
+.container {
+    width: 100%;
+    padding: 20px;
+    margin-top: 15px;
+
+    .list {
+        list-style-type: none;
+
+        .text {
+            font-family: 'Open Sans', sans-serif;
+            font-size: 22px;
+            color: #fff;
+        }
+    }
+}
+
+.rightAnswer {
+    font-family: 'Open Sans', sans-serif;
+    font-size: 22px;
+    color: #fff;
+    margin-top: 15px;
+}
+
+.success {
+    color: greenyellow;
+}
+
+.error {
+    color: rgb(197, 0, 0);
+}
+

@@ -32,8 +32,6 @@ const AnswersItem: React.FC<AnswersItemType> = ({
         return clsx(styles.item, styles.success)
     } else if (isActive === true && id !== rightAnswerId) {
         return clsx(styles.item, styles.error)
-    } else if (isActive === false) {
-        return styles.item
     } else {
         return styles.item
     }

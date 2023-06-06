@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import styles from './Quiz.module.scss'
 import ActiveQuiz from '../../components/ActiveQuiz/ActiveQuiz'
+import FinishedQuiz from '../../components/ActiveQuiz/FinishedQuiz/FinishedQuiz'
 
 export type AnswerType = {
     id: number
@@ -14,12 +15,24 @@ export type QuestionType = {
     answers: AnswerType[]
 }
 
+export type answerStateType = {
+    [id: number]: 'success' | 'error'
+}
 interface StateType {
+    isFinished: boolean
+    activeQuestionId: number
+    answerState: answerStateType[]
     quiz: QuestionType[]
 }
 
 const Quiz: React.FC = () => {
+  const [isFinished, setIsFinished] = useState(false)
+  const [answerState, setAnswerState] = useState<answerStateType[]>([])
+
   const state: StateType = {
+    isFinished: isFinished,
+    activeQuestionId: 1,
+    answerState: answerState, // { [id]: 'success' or 'error' }
     quiz: [
         {
             idQuestion: 1,
@@ -79,6 +92,7 @@ const Quiz: React.FC = () => {
   }
 
   const [activeQuestionId, setActiveQuestionId] = useState(1)
+
   let activeQuestion = state.quiz.find(item => item.idQuestion === activeQuestionId)
 
   const isQuizFinished = () => {
@@ -86,17 +100,30 @@ const Quiz: React.FC = () => {
   }
 
   const onAnswerClickHandler = (answerId: number | null) => {
-    console.log('answerId', answerId)
+    let doubleClickOnBtn = false
+
+    state.answerState.forEach(item => {
+      if (+Object.keys(item)[0] === activeQuestionId) {
+        doubleClickOnBtn = true
+      }
+    })
+
+    if (doubleClickOnBtn) {
+        return
+    }
+
+    if (answerId && activeQuestionId) {
+        answerId === activeQuestion?.rightAnswerId
+          ? setAnswerState(prev => prev.concat({[activeQuestionId]: 'success'}))
+          : setAnswerState(prev => prev.concat({[activeQuestionId]: 'error'}))
+    }
+
     const timeout = window.setTimeout( () => {
-        if (answerId === activeQuestion?.rightAnswerId) {
-            alert('right')
-        } else {
-            alert('wrong')
-        }
         if (isQuizFinished()) {
             setActiveQuestionId(prev => prev + 1)
         } else {
             alert('quiz finished')
+            setIsFinished(true)
         }
         window.clearTimeout(timeout)
     }, 1000)
@@ -104,17 +131,26 @@ const Quiz: React.FC = () => {
 
   return (
     <div className={styles.quiz}>
-        <h1 className={styles.h1}>Ответьте на все вопросы</h1>
+        <h1 className={styles.h1}>
+            {
+              isFinished
+                ? 'Результат'
+                : 'Ответьте на все вопросы'
+            }
+        </h1>
 
         <div className={styles.quizWrapper}>
-            {
-              activeQuestion && <ActiveQuiz
-                quiz={activeQuestion}
-                quizesLength={state.quiz.length}
-                onAnswerClick={onAnswerClickHandler}
-                rightAnswerId={activeQuestion?.rightAnswerId}
-              />
-            }
+          {
+            isFinished
+             ? <FinishedQuiz answerState={answerState} quiz={state.quiz} />
+             : activeQuestion
+                && <ActiveQuiz
+                  quiz={activeQuestion}
+                  quizesLength={state.quiz.length}
+                  onAnswerClick={onAnswerClickHandler}
+                  rightAnswerId={activeQuestion?.rightAnswerId}
+                />
+          }
         </div>
     </div>
   )
