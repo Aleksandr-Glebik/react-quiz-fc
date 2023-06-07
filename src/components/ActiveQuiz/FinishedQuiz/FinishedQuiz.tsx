@@ -18,8 +18,6 @@ type resultType = {
 }
 
 const FinishedQuiz: React.FC<FinishedQuizType> = ({ answerState, quiz, onRetry }) => {
-  console.log('answerState', answerState)
-  console.log('quiz', quiz)
   let result: resultType[] = quiz.map((el, ind) => {
     let status = answerState[ind]
 
@@ -30,8 +28,6 @@ const FinishedQuiz: React.FC<FinishedQuizType> = ({ answerState, quiz, onRetry }
     }
   })
   let rightAnswerLength = result.filter(item => item.status === 'success').length
-
-  console.log('result', result)
 
   return (
     <div className={styles.container}>

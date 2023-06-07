@@ -1,0 +1,44 @@
+.drawer {
+    width: 80%;
+    max-width: 420px;
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    background: rgb(0,255,231);
+    background: linear-gradient(0deg, rgba(0,255,231,1) 0%, rgba(0,159,255,1) 100%);
+    z-index: 90;
+    padding: 120px 40px;
+    transform: translateX(-420px);
+    transition: all ease-in-out 0.35s;
+
+    .list {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+
+        .item {
+            font-family: 'Open Sans', sans-serif;
+            font-size: 28px;
+            font-weight: 600;
+            color: #fff;
+            cursor: pointer;
+            margin-bottom: 15px;
+            transition: all ease-in-out 0.35s;
+
+            &:hover {
+                color: rgb(0,255,231);
+            }
+            &:active {
+                color: rgb(255, 238, 0);
+            }
+            &:focus {
+                color: rgb(0,255,231);
+            }
+        }
+    }
+}
+
+.open {
+    transform: translateX(0);
+}
