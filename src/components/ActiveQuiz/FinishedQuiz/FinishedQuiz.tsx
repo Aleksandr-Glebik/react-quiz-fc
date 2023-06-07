@@ -4,6 +4,7 @@ import clsx from 'clsx'
 import { answerStateType, QuestionType } from '../../../pages/Quiz/Quiz'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faXmark, faCheck } from '@fortawesome/free-solid-svg-icons'
+import { useNavigate } from 'react-router-dom'
 
 interface FinishedQuizType {
   answerState: answerStateType[]
@@ -17,7 +18,12 @@ type resultType = {
   status: string
 }
 
-const FinishedQuiz: React.FC<FinishedQuizType> = ({ answerState, quiz, onRetry }) => {
+const FinishedQuiz: React.FC<FinishedQuizType> = ({
+  answerState,
+  quiz,
+  onRetry
+ }) => {
+  const navigate = useNavigate()
   let result: resultType[] = quiz.map((el, ind) => {
     let status = answerState[ind]
 
@@ -27,7 +33,12 @@ const FinishedQuiz: React.FC<FinishedQuizType> = ({ answerState, quiz, onRetry }
       status: status[el.idQuestion]
     }
   })
+
   let rightAnswerLength = result.filter(item => item.status === 'success').length
+
+  const redirectToList = () => {
+    navigate('/')
+  }
 
   return (
     <div className={styles.container}>
@@ -57,12 +68,18 @@ const FinishedQuiz: React.FC<FinishedQuizType> = ({ answerState, quiz, onRetry }
       <p className={styles.rightAnswer}>
         Правильных ответов {rightAnswerLength} из {result.length}
       </p>
-      <div>
+      <div className={styles.btnContainer}>
         <button
           className={clsx(styles.btn)}
           onClick={onRetry}
         >
           Повторить
+        </button>
+        <button
+          className={clsx(styles.btn, styles.backToQuizList)}
+          onClick={redirectToList}
+        >
+          Перейти в список тестов
         </button>
       </div>
     </div>

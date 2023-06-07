@@ -36,6 +36,13 @@
     color: rgb(197, 0, 0);
 }
 
+.btnContainer {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 15px;
+}
+
 .btn {
     border: none;
     background-color: inherit;
@@ -48,6 +55,15 @@
     color: #fff;
     cursor: pointer;
     transition: all ease-in-out 0.35s;
+
+    &:hover {
+        background-color: rgba(255, 255, 255, 0.2);
+    }
+}
+
+.backToQuizList {
+    background-color: rgba(115, 254, 159, .7);
+    color: rgb(0, 30, 165);
 
     &:hover {
         background-color: rgba(255, 255, 255, 0.2);

@@ -5,8 +5,7 @@
     top: 0;
     left: 0;
     bottom: 0;
-    background: rgb(0,255,231);
-    background: linear-gradient(0deg, rgba(0,255,231,1) 0%, rgba(0,159,255,1) 100%);
+    background: linear-gradient(to right, #2c3e50, #4ca1af);
     z-index: 90;
     padding: 120px 40px;
     transform: translateX(-420px);
@@ -25,6 +24,8 @@
             cursor: pointer;
             margin-bottom: 15px;
             transition: all ease-in-out 0.35s;
+            text-decoration: none;
+            display: block;
 
             &:hover {
                 color: rgb(0,255,231);

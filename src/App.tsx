@@ -1,12 +1,11 @@
 import React from 'react'
 import Layout from './hoc/Layout/Layout'
-import Quiz from './pages/Quiz/Quiz'
-
+import { Outlet } from "react-router-dom"
 
 function App() {
   return (
     <Layout>
-      <Quiz />
+      <Outlet />
     </Layout>
   )
 }
