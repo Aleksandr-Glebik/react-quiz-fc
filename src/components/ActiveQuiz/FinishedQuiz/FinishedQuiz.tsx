@@ -5,6 +5,7 @@ import { answerStateType, QuestionType } from '../../../pages/Quiz/Quiz'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faXmark, faCheck } from '@fortawesome/free-solid-svg-icons'
 import { useNavigate } from 'react-router-dom'
+import Button from '../UI/Button/Button'
 
 interface FinishedQuizType {
   answerState: answerStateType[]
@@ -69,18 +70,17 @@ const FinishedQuiz: React.FC<FinishedQuizType> = ({
         Правильных ответов {rightAnswerLength} из {result.length}
       </p>
       <div className={styles.btnContainer}>
-        <button
-          className={clsx(styles.btn)}
+        <Button
           onClick={onRetry}
         >
           Повторить
-        </button>
-        <button
-          className={clsx(styles.btn, styles.backToQuizList)}
+        </Button>
+        <Button
+          type='backToQuizList'
           onClick={redirectToList}
         >
           Перейти в список тестов
-        </button>
+        </Button>
       </div>
     </div>
   )
