@@ -9,16 +9,25 @@ interface inputType {
     label?: string
     value?: string
     errorMessage?: string
-    onChange?: () => void
+    onChange?: (value: any) => void
+    shouldValidate?: boolean
+    valid?: boolean
+    touched?: boolean
 }
 
-// const isInvalid = ({
-//     valid,
-//     touched,
-//     shouldValidate
-// }) => {
-//     return !valid && shouldValidate && touched
-// }
+interface isInvalidType {
+    valid?: boolean
+    touched?: boolean
+    shouldValidate?: boolean
+}
+
+const isInvalid = ({
+    valid,
+    touched,
+    shouldValidate
+}: isInvalidType) => {
+    return !valid && shouldValidate && touched
+}
 
 const Input: React.FC<inputType> = ({
     inputType,
@@ -27,7 +36,10 @@ const Input: React.FC<inputType> = ({
     label,
     value,
     onChange,
-    errorMessage
+    errorMessage,
+    shouldValidate,
+    valid,
+    touched
 }) => {
   const htmlFor = `${inputType}-${Math.random()}`
 
@@ -37,7 +49,7 @@ const Input: React.FC<inputType> = ({
           htmlFor={htmlFor}
           className={clsx(
             styles.label,
-            errorMessage ? styles.invalid : ''
+            isInvalid({ valid, shouldValidate, touched }) ? styles.invalid : ''
           )}
         >
             {label}
@@ -54,17 +66,12 @@ const Input: React.FC<inputType> = ({
           onChange={onChange}
         />
         {
-            errorMessage && <span className={styles.errorValidate}>
-                    {errorMessage}
-            </span>
-        }
-        {/* {
-          isInvalid()
+          isInvalid({ valid, shouldValidate, touched })
             ? (<span className={styles.errorValidate}>
                 {errorMessage || 'Ввудите верное значение'}
               </span>)
             : null
-        } */}
+        }
 
     </div>
   )

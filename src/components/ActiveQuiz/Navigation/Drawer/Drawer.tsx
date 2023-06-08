@@ -15,8 +15,6 @@ const pathArr = [
 ]
 
 const Drawer: React.FC<DrawerType> = ({ isOpenMenu, handlerClick }) => {
-  console.log('pathArr', pathArr)
-
   return (
     <>
         {isOpenMenu && <Backdrop handlerClick={handlerClick} />}
