@@ -1,7 +1,7 @@
 import React from 'react'
-import clsx from 'clsx'
 import styles from './Auth.module.scss'
 import Button from '../../components/ActiveQuiz/UI/Button/Button'
+import Input from '../../components/ActiveQuiz/UI/Input/Input'
 
 const Auth = () => {
   const submitHandler = (event: any) => {
@@ -17,15 +17,19 @@ const Auth = () => {
           className={styles.form}
           onSubmit={event => submitHandler(event)}
         >
-          <input
-            type='text'
+          <Input
+            inputType='text'
             placeholder='Введите логин'
-            className={clsx(styles.input)}
+            addStyles='inputAuth'
+            label='Email'
+            errorMessage='error message'
           />
-          <input
-            type='password'
+          <Input
+            inputType='password'
             placeholder='Введите пароль'
-            className={clsx(styles.input)}
+            addStyles='inputAuth'
+            label='Пароль'
+            // errorMessage='error message'
           />
           <div className={styles.btnContainer}>
             <Button
