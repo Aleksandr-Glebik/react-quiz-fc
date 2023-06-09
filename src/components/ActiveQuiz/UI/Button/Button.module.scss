@@ -51,3 +51,21 @@
         background-color: rgba(255, 255, 255, 0.2);
     }
 }
+
+.addQuiz {
+    background-color: #6a82fb;
+    color: rgb(255, 255, 255);
+
+    &:hover {
+        background-color: #3d5dff;
+    }
+}
+
+.createTest {
+    background-color: #fc5c7d;
+    color: rgb(255, 255, 255);
+
+    &:hover {
+        background-color: #ff385f;
+    }
+}

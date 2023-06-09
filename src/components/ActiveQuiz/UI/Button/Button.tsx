@@ -5,7 +5,7 @@ import clsx from 'clsx'
 interface buttonType {
     children?: ReactNode | string
     disabled?: boolean
-    type?: 'btnLogin' | 'btnRegister' | 'backToQuizList'
+    type?: 'btnLogin' | 'btnRegister' | 'backToQuizList' | 'addQuiz' | 'createTest'
     onClick?: () => void
 }
 

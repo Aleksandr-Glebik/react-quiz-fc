@@ -2,7 +2,7 @@ import React from 'react'
 import styles from './Input.module.scss'
 import clsx from 'clsx'
 
-interface inputType {
+export interface inputType {
     inputType?: string
     placeholder?: string
     addStyles?: string
@@ -13,9 +13,10 @@ interface inputType {
     shouldValidate?: boolean
     valid?: boolean
     touched?: boolean
+    id?: number
 }
 
-interface isInvalidType {
+export interface isInvalidType {
     valid?: boolean
     touched?: boolean
     shouldValidate?: boolean
