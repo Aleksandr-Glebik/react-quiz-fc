@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react'
 import styles from './QuizList.module.scss'
 import { NavLink } from 'react-router-dom'
 import axios from 'axios'
+import Loader from '../../components/ActiveQuiz/UI/Loader/Loader'
 
 const url = 'https://react-quiz-fc-946b4-default-rtdb.firebaseio.com/quizes.json'
 
@@ -11,9 +12,11 @@ type quizesType = {
 }
 interface initialStateType {
   quizes: quizesType[]
+  loading: boolean
 }
 const initialState: initialStateType = {
-  quizes: []
+  quizes: [],
+  loading: true
 }
 
 const QuizList = () => {
@@ -33,7 +36,8 @@ const QuizList = () => {
       })
 
       setData({
-        quizes
+        quizes,
+        loading: false
       })
     }
     fetchData()
@@ -45,21 +49,25 @@ const QuizList = () => {
       <div>
         <h2 className={styles.title}>Список тестов</h2>
 
-        <ul className={styles.list}>
-          {data.quizes && data.quizes.map((quiz) => (
-            <li
-              className={styles.item}
-              key={`${quiz.id}`}
-            >
-              <NavLink
-                to={`/quiz/` + quiz.id }
-                className={styles.link}
+        {
+          !data.loading
+           ? <ul className={styles.list}>
+            {data.quizes && data.quizes.map((quiz) => (
+              <li
+                className={styles.item}
+                key={`${quiz.id}`}
               >
-                {quiz.name}
-              </NavLink>
-            </li>
-          ))}
-        </ul>
+                <NavLink
+                  to={`/quiz/` + quiz.id }
+                  className={styles.link}
+                >
+                  {quiz.name}
+                </NavLink>
+              </li>
+            ))}
+          </ul>
+          : <Loader />
+        }
       </div>
     </div>
   )
