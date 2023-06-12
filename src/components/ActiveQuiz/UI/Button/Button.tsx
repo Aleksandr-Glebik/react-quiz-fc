@@ -6,7 +6,7 @@ interface buttonType {
     children?: ReactNode | string
     disabled?: boolean
     type?: 'btnLogin' | 'btnRegister' | 'backToQuizList' | 'addQuiz' | 'createTest'
-    onClick?: () => void
+    onClick?: (event: any) => void
 }
 
 const Button: React.FC<buttonType> = ({ children, onClick, disabled, type }) => {
