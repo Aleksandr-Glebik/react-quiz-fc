@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import axios from 'axios'
 import styles from './QuizCreator.module.scss'
 import Button from '../../components/ActiveQuiz/UI/Button/Button'
 import Input from '../../components/ActiveQuiz/UI/Input/Input'
@@ -103,7 +104,7 @@ const QuizCreator = () => {
 
     const questionItem = {
       question: question.value,
-      id: index,
+      idQuestion: index,
       rightAnswerId: state.rightAnswerId,
       answers: [
         { text: option1.value, id: option1.id },
@@ -122,9 +123,20 @@ const QuizCreator = () => {
     })
   }
 
-  const createTestHandler = (event: any) => {
+  const createTestHandler = async (event: any) => {
     event.preventDefault()
-    console.log('quiz', state.quiz);
+
+    try {
+      await axios.post('https://react-quiz-fc-946b4-default-rtdb.firebaseio.com/quizes.json', state.quiz)
+      setState({
+        quiz: [],
+        formControls: createFormControls(),
+        rightAnswerId: 1,
+        isFormValid: false
+      })
+    } catch (error) {
+      console.log('error', error)
+    }
   }
 
   const onChangeHandler = (event: any) => {
