@@ -4,6 +4,7 @@ import Button from '../../components/ActiveQuiz/UI/Button/Button'
 import Input from '../../components/ActiveQuiz/UI/Input/Input'
 import { createControl, createControlType } from '../../form/FormFramework'
 import Auxilliary from '../../hoc/Auxilliary/Auxilliary'
+import Select from '../../components/ActiveQuiz/UI/Select/Select'
 interface createFormControlsType {
   [question: string]: createControlType
   option1: createControlType
@@ -35,11 +36,13 @@ const createFormControls = (): createFormControlsType => {
 interface initialStateType {
   quiz: any
   formControls: createFormControlsType
+  rightAnswerId: number
 }
 
 const initialState = {
   quiz: [],
-  formControls: createFormControls()
+  formControls: createFormControls(),
+  rightAnswerId: 1
 }
 
 const QuizCreator = () => {
@@ -85,6 +88,14 @@ const QuizCreator = () => {
 
   }
 
+  const onChangeHandler = (event: any) => {
+    event.preventDefault()
+    setState({
+      ...state,
+      rightAnswerId: +event.target.value
+    })
+  }
+
   return (
     <div className={styles.quizCreator}>
       <div className={styles.container}>
@@ -94,7 +105,19 @@ const QuizCreator = () => {
           onSubmit={event => submitHandler(event)}
         >
           {renderInputGroup()}
-          <select></select>
+
+          <Select
+            label='Выберите правильный вариант ответа'
+            value={state.rightAnswerId}
+            onChangeHandler={onChangeHandler}
+            options={[
+              {text: '1', value: 1},
+              {text: '2', value: 2},
+              {text: '3', value: 3},
+              {text: '4', value: 4},
+            ]}
+          />
+
           <div className={styles.btnContainer}>
             <Button
               type='addQuiz'
