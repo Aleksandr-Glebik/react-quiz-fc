@@ -1,5 +1,7 @@
 import React from 'react'
 import ReactDOM from 'react-dom/client'
+import { Provider } from 'react-redux'
+import store from './redux/store'
 import App from './App'
 import NotFoundBlock from './pages/NotFoundPage/NotFoundPage'
 import QuizList from './pages/QuizList/QuizList'
@@ -42,5 +44,7 @@ const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
 )
 root.render(
-  <RouterProvider router={router} />
+  <Provider store={store}>
+    <RouterProvider router={router} />
+  </Provider>
 )
