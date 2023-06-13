@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import styles from './Auth.module.scss'
 import Button from '../../components/ActiveQuiz/UI/Button/Button'
 import Input from '../../components/ActiveQuiz/UI/Input/Input'
+import axios from 'axios'
 
 type validationEmailType = {
   required: boolean
@@ -81,12 +82,32 @@ const Auth = () => {
   const [password, setPassword] = useState<initialPasswordStateType>(initialPasswordState)
   const [isFormValid, setIsFormValid] = useState(false)
 
-  const loginHandler = () => {
-
+  const loginHandler = async () => {
+    const authData = {
+      email: email.value,
+      password: password.value,
+      returnSecureToken: true
+    }
+    try {
+      const response = await axios.post(`https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=AIzaSyCNWp37sXC2QtpleOmY7enr_z5xIjXpgU0`, authData)
+      console.log('data', response.data)
+    } catch (error) {
+      console.log('error', error)
+    }
   }
 
-  const registerHandler = () => {
-
+  const registerHandler = async () => {
+    const authData = {
+      email: email.value,
+      password: password.value,
+      returnSecureToken: true
+    }
+    try {
+      const response = await axios.post(`https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=AIzaSyCNWp37sXC2QtpleOmY7enr_z5xIjXpgU0`, authData)
+      console.log('data', response.data)
+    } catch (error) {
+      console.log('error', error)
+    }
   }
 
   const validateInput = (

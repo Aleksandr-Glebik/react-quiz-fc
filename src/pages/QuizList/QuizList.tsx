@@ -1,10 +1,8 @@
 import React, { useState, useEffect } from 'react'
 import styles from './QuizList.module.scss'
 import { NavLink } from 'react-router-dom'
-import axios from 'axios'
+import axios from '../../axios/axios-quiz'
 import Loader from '../../components/ActiveQuiz/UI/Loader/Loader'
-
-const url = 'https://react-quiz-fc-946b4-default-rtdb.firebaseio.com/quizes.json'
 
 type quizesType = {
   id: string
@@ -24,7 +22,7 @@ const QuizList = () => {
 
   useEffect( () => {
     const fetchData = async () => {
-      const { data } = await axios.get(url)
+      const { data } = await axios.get('/quizes.json')
 
       const quizes: quizesType[] = []
 

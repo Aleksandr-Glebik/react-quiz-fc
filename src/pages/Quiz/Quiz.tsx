@@ -1,7 +1,10 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import styles from './Quiz.module.scss'
 import ActiveQuiz from '../../components/ActiveQuiz/ActiveQuiz'
 import FinishedQuiz from '../../components/ActiveQuiz/FinishedQuiz/FinishedQuiz'
+import axios from '../../axios/axios-quiz'
+import { useLocation } from 'react-router-dom'
+import Loader from '../../components/ActiveQuiz/UI/Loader/Loader'
 
 export type AnswerType = {
     id: number
@@ -23,75 +26,38 @@ interface StateType {
     activeQuestionId: number
     answerState: answerStateType[]
     quiz: QuestionType[]
+    loading: boolean
 }
 
 const Quiz: React.FC = () => {
+  const { pathname } = useLocation()
+  const [quiz, setQuiz] = useState<QuestionType[]>([])
+  const [isLoading, setIsLoading] = useState(true)
+
   const [isFinished, setIsFinished] = useState(false)
   const [answerState, setAnswerState] = useState<answerStateType[]>([])
 
   const state: StateType = {
     isFinished: isFinished,
     activeQuestionId: 1,
-    answerState: answerState, // { [id]: 'success' or 'error' }
-    quiz: [
-        {
-            idQuestion: 1,
-            question: 'Какого цвета солнце?',
-            rightAnswerId: 1,
-            answers: [
-                {
-                    id: 1,
-                    text: '1. Желтый'
-                },
-                {
-                    id: 2,
-                    text: '2. Зеленый'
-                },
-                {
-                    id: 3,
-                    text: '3. Красный'
-                },
-                {
-                    id: 4,
-                    text: '4. Черный'
-                },
-                {
-                    id: 5,
-                    text: '5. Белый'
-                },
-            ]
-        },
-        {
-            idQuestion: 2,
-            question: 'Какого цвета небо?',
-            rightAnswerId: 3,
-            answers: [
-                {
-                    id: 1,
-                    text: '1. Желтый'
-                },
-                {
-                    id: 2,
-                    text: '2. Зеленый'
-                },
-                {
-                    id: 3,
-                    text: '3. Синий'
-                },
-                {
-                    id: 4,
-                    text: '4. Черный'
-                },
-                {
-                    id: 5,
-                    text: '5. Белый'
-                },
-            ]
-        },
-    ]
+    answerState: answerState,
+    quiz: quiz,
+    loading: isLoading
   }
 
   const [activeQuestionId, setActiveQuestionId] = useState(1)
+
+  useEffect( () => {
+    const fetchData = async () => {
+        const newId = pathname.slice(6)
+        const response = await axios.get(`/quizes/${newId}.json`)
+        const quiz = response.data
+        setQuiz(quiz)
+        setIsLoading(false)
+      }
+      fetchData()
+        .catch(console.error)
+  }, [pathname])
 
   let activeQuestion = state.quiz.find(item => item.idQuestion === activeQuestionId)
 
@@ -122,7 +88,6 @@ const Quiz: React.FC = () => {
         if (isQuizFinished()) {
             setActiveQuestionId(prev => prev + 1)
         } else {
-            alert('quiz finished')
             setIsFinished(true)
         }
         window.clearTimeout(timeout)
@@ -147,19 +112,23 @@ const Quiz: React.FC = () => {
 
         <div className={styles.quizWrapper}>
           {
-            isFinished
-             ? <FinishedQuiz
-                 answerState={answerState}
-                 quiz={state.quiz}
-                 onRetry={onRetryHandler}
-               />
-             : activeQuestion
-                && <ActiveQuiz
-                  quiz={activeQuestion}
-                  quizesLength={state.quiz.length}
-                  onAnswerClick={onAnswerClickHandler}
-                  rightAnswerId={activeQuestion?.rightAnswerId}
-                />
+            isLoading
+              ? <Loader />
+              : (
+                    isFinished
+                    ? <FinishedQuiz
+                        answerState={answerState}
+                        quiz={state.quiz}
+                        onRetry={onRetryHandler}
+                    />
+                    : activeQuestion
+                        && <ActiveQuiz
+                        quiz={activeQuestion}
+                        quizesLength={state.quiz.length}
+                        onAnswerClick={onAnswerClickHandler}
+                        rightAnswerId={activeQuestion?.rightAnswerId}
+                        />
+                )
           }
         </div>
     </div>

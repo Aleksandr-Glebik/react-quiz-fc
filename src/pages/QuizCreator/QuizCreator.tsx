@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import axios from 'axios'
+import axios from '../../axios/axios-quiz'
 import styles from './QuizCreator.module.scss'
 import Button from '../../components/ActiveQuiz/UI/Button/Button'
 import Input from '../../components/ActiveQuiz/UI/Input/Input'
@@ -127,7 +127,7 @@ const QuizCreator = () => {
     event.preventDefault()
 
     try {
-      await axios.post('https://react-quiz-fc-946b4-default-rtdb.firebaseio.com/quizes.json', state.quiz)
+      await axios.post('/quizes.json', state.quiz)
       setState({
         quiz: [],
         formControls: createFormControls(),
