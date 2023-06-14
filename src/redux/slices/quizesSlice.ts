@@ -12,7 +12,6 @@ export enum Status {
     SUCCESS = 'success',
     ERROR = 'error'
 }
-
 interface QuizesSliceState {
     quizes: QuizesSliceItemType[]
     status: Status

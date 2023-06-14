@@ -2,7 +2,7 @@ import React from 'react'
 import styles from './ActiveQuiz.module.scss'
 import AnswersList from './AnswersList/AnswersList'
 
-import { QuestionType } from '../../pages/Quiz/Quiz'
+import { QuestionType } from '../../redux/slices/quizSlice'
 interface ActiveQuizType {
     quiz: QuestionType
     quizesLength: number

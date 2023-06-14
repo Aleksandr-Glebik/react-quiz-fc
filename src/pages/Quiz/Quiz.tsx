@@ -1,74 +1,52 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect } from 'react'
 import styles from './Quiz.module.scss'
+
 import ActiveQuiz from '../../components/ActiveQuiz/ActiveQuiz'
 import FinishedQuiz from '../../components/ActiveQuiz/FinishedQuiz/FinishedQuiz'
-import axios from '../../axios/axios-quiz'
-import { useLocation } from 'react-router-dom'
 import Loader from '../../components/ActiveQuiz/UI/Loader/Loader'
 
-export type AnswerType = {
-    id: number
-    text: string
-}
-
-export type QuestionType = {
-    idQuestion: number
-    question: string
-    rightAnswerId: number
-    answers: AnswerType[]
-}
-
-export type answerStateType = {
-    [id: number]: 'success' | 'error'
-}
-interface StateType {
-    isFinished: boolean
-    activeQuestionId: number
-    answerState: answerStateType[]
-    quiz: QuestionType[]
-    loading: boolean
-}
+import { useLocation } from 'react-router-dom'
+import { useAppDispatch } from '../../redux/store'
+import { useSelector } from 'react-redux'
+import {
+  Status,
+  selectQuiz,
+  fetchQuiz,
+  setIsFinished,
+  setActiveQuestionId,
+  setAnswerState,
+  retryStateQuiz
+} from '../../redux/slices/quizSlice'
 
 const Quiz: React.FC = () => {
   const { pathname } = useLocation()
-  const [quiz, setQuiz] = useState<QuestionType[]>([])
-  const [isLoading, setIsLoading] = useState(true)
-
-  const [isFinished, setIsFinished] = useState(false)
-  const [answerState, setAnswerState] = useState<answerStateType[]>([])
-
-  const state: StateType = {
-    isFinished: isFinished,
-    activeQuestionId: 1,
-    answerState: answerState,
-    quiz: quiz,
-    loading: isLoading
-  }
-
-  const [activeQuestionId, setActiveQuestionId] = useState(1)
+  const dispatch = useAppDispatch()
+  const {
+    quiz,
+    status,
+    isFinished,
+    activeQuestionId,
+    answerState
+  } = useSelector(selectQuiz)
 
   useEffect( () => {
-    const fetchData = async () => {
-        const newId = pathname.slice(6)
-        const response = await axios.get(`/quizes/${newId}.json`)
-        const quiz = response.data
-        setQuiz(quiz)
-        setIsLoading(false)
-      }
-      fetchData()
-        .catch(console.error)
-  }, [pathname])
+    dispatch(retryStateQuiz())
 
-  let activeQuestion = state.quiz.find(item => item.idQuestion === activeQuestionId)
+    const quizId =  pathname.slice(6)
+
+    dispatch(fetchQuiz(quizId))
+  }, [pathname, dispatch])
+
+  let activeQuestion = quiz.find(item => item.idQuestion === activeQuestionId)
 
   const isQuizFinished = () => {
-    return activeQuestion && state.quiz.length > activeQuestion.idQuestion
+    return activeQuestion && quiz.length > activeQuestion.idQuestion
   }
 
   const onAnswerClickHandler = (answerId: number | null) => {
     let doubleClickOnBtn = false
 
-    state.answerState.forEach(item => {
+    answerState.forEach(item => {
       if (+Object.keys(item)[0] === activeQuestionId) {
         doubleClickOnBtn = true
       }
@@ -80,24 +58,22 @@ const Quiz: React.FC = () => {
 
     if (answerId && activeQuestionId) {
         answerId === activeQuestion?.rightAnswerId
-          ? setAnswerState(prev => prev.concat({[activeQuestionId]: 'success'}))
-          : setAnswerState(prev => prev.concat({[activeQuestionId]: 'error'}))
+          ? dispatch(setAnswerState(answerState.concat({[activeQuestionId]: 'success'})))
+          : dispatch(setAnswerState(answerState.concat({[activeQuestionId]: 'error'})))
     }
 
     const timeout = window.setTimeout( () => {
         if (isQuizFinished()) {
-            setActiveQuestionId(prev => prev + 1)
+          dispatch(setActiveQuestionId(activeQuestionId + 1))
         } else {
-            setIsFinished(true)
+          dispatch(setIsFinished(true))
         }
         window.clearTimeout(timeout)
     }, 1000)
   }
 
   const onRetryHandler = () => {
-    setIsFinished(false)
-    setAnswerState([])
-    setActiveQuestionId(1)
+    dispatch(retryStateQuiz())
   }
 
   return (
@@ -112,19 +88,19 @@ const Quiz: React.FC = () => {
 
         <div className={styles.quizWrapper}>
           {
-            isLoading
+            status === Status.LOADING
               ? <Loader />
               : (
                     isFinished
                     ? <FinishedQuiz
                         answerState={answerState}
-                        quiz={state.quiz}
+                        quiz={quiz}
                         onRetry={onRetryHandler}
                     />
                     : activeQuestion
                         && <ActiveQuiz
                         quiz={activeQuestion}
-                        quizesLength={state.quiz.length}
+                        quizesLength={quiz.length}
                         onAnswerClick={onAnswerClickHandler}
                         rightAnswerId={activeQuestion?.rightAnswerId}
                         />

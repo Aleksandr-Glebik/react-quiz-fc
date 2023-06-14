@@ -1,7 +1,7 @@
 import React from 'react'
 import styles from './FinishedQuiz.module.scss'
 import clsx from 'clsx'
-import { answerStateType, QuestionType } from '../../../pages/Quiz/Quiz'
+import { answerStateType, QuestionType } from '../../../redux/slices/quizSlice'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faXmark, faCheck } from '@fortawesome/free-solid-svg-icons'
 import { useNavigate } from 'react-router-dom'
