@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import styles from './QuizCreator.module.scss'
 
 import Button from '../../components/ActiveQuiz/UI/Button/Button'
@@ -18,7 +18,9 @@ import { useSelector } from 'react-redux'
 import {
   createQuizQuestion,
   selectCreateQuiz,
-  finishCreateQuiz
+  finishCreateQuiz,
+  resetQuizState,
+  Status
 } from '../../redux/slices/createSlice'
 
 const createOptionControl = (number: number): createControlType => {
@@ -55,8 +57,7 @@ const initialState = {
 
 const QuizCreator = () => {
   const dispatch = useAppDispatch()
-  const { createQuiz } = useSelector(selectCreateQuiz)
-
+  const { createQuiz, status } = useSelector(selectCreateQuiz)
   const [state, setState] = useState<initialStateType>(initialState)
 
   const changeHandlerControl = (value: string, controlName: string) => {
@@ -136,17 +137,13 @@ const QuizCreator = () => {
   const createTestHandler = async (event: any) => {
     event.preventDefault()
 
-    try {
-      dispatch(finishCreateQuiz(createQuiz))
-      
-      setState({
-        formControls: createFormControls(),
-        rightAnswerId: 1,
-        isFormValid: false
-      })
-    } catch (error) {
-      console.log('error', error)
-    }
+    dispatch(finishCreateQuiz(createQuiz))
+
+    setState({
+      formControls: createFormControls(),
+      rightAnswerId: 1,
+      isFormValid: false
+    })
   }
 
   const onChangeHandler = (event: any) => {
@@ -156,6 +153,12 @@ const QuizCreator = () => {
       rightAnswerId: +event.target.value
     })
   }
+
+  useEffect( () => {
+    if (status === Status.SUCCESS) {
+      dispatch(resetQuizState())
+    }
+  }, [status, dispatch])
 
   return (
     <div className={styles.quizCreator}>
