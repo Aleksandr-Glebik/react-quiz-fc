@@ -2,7 +2,14 @@ import React, { useEffect, useState } from 'react'
 import styles from './Auth.module.scss'
 import Button from '../../components/ActiveQuiz/UI/Button/Button'
 import Input from '../../components/ActiveQuiz/UI/Input/Input'
-import axios from 'axios'
+
+import { useAppDispatch } from '../../redux/store'
+import { useSelector } from 'react-redux'
+import {
+  selectAuth,
+  authFetch,
+  logout
+} from '../../redux/slices/authSlice'
 
 type validationEmailType = {
   required: boolean
@@ -82,32 +89,33 @@ const Auth = () => {
   const [password, setPassword] = useState<initialPasswordStateType>(initialPasswordState)
   const [isFormValid, setIsFormValid] = useState(false)
 
-  const loginHandler = async () => {
+  const dispatch = useAppDispatch()
+  const { token, status } = useSelector(selectAuth)
+  console.log('selectAuth token', token);
+  console.log('selectAuth status', status);
+
+  const loginHandler = () => {
     const authData = {
       email: email.value,
       password: password.value,
-      returnSecureToken: true
+      returnSecureToken: true,
+      isLogin: true
     }
-    try {
-      const response = await axios.post(`https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=AIzaSyCNWp37sXC2QtpleOmY7enr_z5xIjXpgU0`, authData)
-      console.log('data', response.data)
-    } catch (error) {
-      console.log('error', error)
-    }
+    dispatch(authFetch(authData))
   }
 
-  const registerHandler = async () => {
+  const registerHandler = () => {
     const authData = {
       email: email.value,
       password: password.value,
-      returnSecureToken: true
+      returnSecureToken: true,
+      isLogin: false
     }
-    try {
-      const response = await axios.post(`https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=AIzaSyCNWp37sXC2QtpleOmY7enr_z5xIjXpgU0`, authData)
-      console.log('data', response.data)
-    } catch (error) {
-      console.log('error', error)
-    }
+    dispatch(authFetch(authData))
+  }
+
+  const logoutHandler = () => {
+    dispatch(logout())
   }
 
   const validateInput = (
@@ -152,11 +160,6 @@ const Auth = () => {
       valid: validateInput(password.value, password.validation)
     })
   }
-
-  console.log('email', email.valid)
-  console.log('password', password.valid)
-  console.log('isFormValid', isFormValid)
-
 
   useEffect( () => {
     if (email.valid && password.valid) {
@@ -213,6 +216,13 @@ const Auth = () => {
               disabled={isFormValid ? false : true}
             >
               Зарегистрироваться
+            </Button>
+            <Button
+              type='createTest'
+              onClick={logoutHandler}
+              // disabled={isFormValid ? false : true}
+            >
+              Выйти
             </Button>
           </div>
         </form>

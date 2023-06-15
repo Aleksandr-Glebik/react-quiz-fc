@@ -3,12 +3,14 @@ import { useDispatch } from 'react-redux'
 import quizesSlice from './slices/quizesSlice'
 import quizSlice  from "./slices/quizSlice"
 import createQuizSlice  from "./slices/createSlice"
+import authSlice  from "./slices/authSlice"
 
 const store = configureStore({
     reducer: {
         quizes: quizesSlice,
         quiz: quizSlice,
-        createQuiz: createQuizSlice
+        createQuiz: createQuizSlice,
+        auth: authSlice
     }
 })
 
