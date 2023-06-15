@@ -1,11 +1,25 @@
 import React, { useState } from 'react'
-import axios from '../../axios/axios-quiz'
 import styles from './QuizCreator.module.scss'
+
 import Button from '../../components/ActiveQuiz/UI/Button/Button'
 import Input from '../../components/ActiveQuiz/UI/Input/Input'
-import { createControl, createControlType, validateControls, createFormControlsType, validateForm } from '../../form/FormFramework'
 import Auxilliary from '../../hoc/Auxilliary/Auxilliary'
 import Select from '../../components/ActiveQuiz/UI/Select/Select'
+import {
+  createControl,
+  createControlType,
+  validateControls,
+  createFormControlsType,
+  validateForm
+} from '../../form/FormFramework'
+
+import { useAppDispatch } from '../../redux/store'
+import { useSelector } from 'react-redux'
+import {
+  createQuizQuestion,
+  selectCreateQuiz,
+  finishCreateQuiz
+} from '../../redux/slices/createSlice'
 
 const createOptionControl = (number: number): createControlType => {
   return createControl({
@@ -28,20 +42,21 @@ const createFormControls = (): createFormControlsType => {
   }
 }
 interface initialStateType {
-  quiz: any
   formControls: createFormControlsType
   rightAnswerId: number
   isFormValid: boolean
 }
 
 const initialState = {
-  quiz: [],
   formControls: createFormControls(),
   rightAnswerId: 1,
   isFormValid: false
 }
 
 const QuizCreator = () => {
+  const dispatch = useAppDispatch()
+  const { createQuiz } = useSelector(selectCreateQuiz)
+
   const [state, setState] = useState<initialStateType>(initialState)
 
   const changeHandlerControl = (value: string, controlName: string) => {
@@ -83,16 +98,12 @@ const QuizCreator = () => {
     return inputs
   }
 
-
   const submitHandler = (event: any) => {
     event.preventDefault()
   }
 
   const addQuestionHandler = (event: any) => {
     event.preventDefault()
-
-    const quiz = state.quiz.concat()
-    const index = quiz.length + 1
 
     const {
       question,
@@ -104,7 +115,7 @@ const QuizCreator = () => {
 
     const questionItem = {
       question: question.value,
-      idQuestion: index,
+      idQuestion: createQuiz.length + 1,
       rightAnswerId: state.rightAnswerId,
       answers: [
         { text: option1.value, id: option1.id },
@@ -114,9 +125,8 @@ const QuizCreator = () => {
       ]
     }
 
-    quiz.push(questionItem)
+    dispatch(createQuizQuestion(questionItem))
     setState({
-      quiz,
       formControls: createFormControls(),
       rightAnswerId: 1,
       isFormValid: false
@@ -127,9 +137,9 @@ const QuizCreator = () => {
     event.preventDefault()
 
     try {
-      await axios.post('/quizes.json', state.quiz)
+      dispatch(finishCreateQuiz(createQuiz))
+      
       setState({
-        quiz: [],
         formControls: createFormControls(),
         rightAnswerId: 1,
         isFormValid: false
@@ -180,7 +190,7 @@ const QuizCreator = () => {
             <Button
               type='createTest'
               onClick={createTestHandler}
-              disabled={state.quiz.length === 0 ? true : false}
+              disabled={createQuiz.length === 0 ? true : false}
             >
               Создать тест
             </Button>
