@@ -58,7 +58,15 @@ const initialState = {
 const QuizCreator = () => {
   const dispatch = useAppDispatch()
   const { createQuiz, status } = useSelector(selectCreateQuiz)
-  const [state, setState] = useState<initialStateType>(initialState)
+  const [ state, setState ] = useState<initialStateType>(initialState)
+
+  useEffect( () => {
+    setState({
+      formControls: createFormControls(),
+      rightAnswerId: 1,
+      isFormValid: false
+    })
+  }, [])
 
   const changeHandlerControl = (value: string, controlName: string) => {
     const formControls = { ...state.formControls}
@@ -157,6 +165,11 @@ const QuizCreator = () => {
   useEffect( () => {
     if (status === Status.SUCCESS) {
       dispatch(resetQuizState())
+      setState({
+        formControls: createFormControls(),
+        rightAnswerId: 1,
+        isFormValid: false
+      })
     }
   }, [status, dispatch])
 

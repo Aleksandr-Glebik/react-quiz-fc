@@ -22,15 +22,15 @@ export const router = createBrowserRouter([
     children: [
       {
         path: "/",
-        element: <QuizList />,
+        element: <Auth />,
       },
       {
         path: "/quiz/:id",
         element: <Quiz />,
       },
       {
-        path: "/auth",
-        element: <Auth />,
+        path: "/quiz-list",
+        element: <QuizList />,
       },
       {
         path: "/quiz-creator",

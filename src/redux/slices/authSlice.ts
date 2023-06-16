@@ -40,10 +40,10 @@ export const authFetch = createAsyncThunk<authType, authArgType>(
 
         const response = await axios.post(url, authData)
         const data = await response.data
-        console.log('data', data)
 
         localStorage.setItem('token', data.idToken)
         localStorage.setItem('userId', data.localId)
+        localStorage.setItem('userEmail', data.email)
 
         return data.idToken
     }
@@ -56,11 +56,17 @@ export const authSlice = createSlice({
         logout(state) {
             localStorage.removeItem('token')
             localStorage.removeItem('userId')
+            localStorage.removeItem('userEmail')
 
             state.token = ''
             state.status = Status.LOADING
+        },
+        autoLogin(state) {
+            let getTokenFromLS = localStorage.getItem('token')
+            if (getTokenFromLS) {
+                state.token = state.token + getTokenFromLS
+            }
         }
-
     },
     extraReducers: (builder) => {
         builder.addCase(authFetch.pending, (state) => {
@@ -80,6 +86,6 @@ export const authSlice = createSlice({
 
 export const selectAuth = (state: RootState) => state.auth
 
-export const { logout } = authSlice.actions
+export const { logout, autoLogin } = authSlice.actions
 
 export default authSlice.reducer

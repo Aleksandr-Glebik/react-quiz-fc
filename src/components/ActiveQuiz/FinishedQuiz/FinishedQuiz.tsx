@@ -38,7 +38,7 @@ const FinishedQuiz: React.FC<FinishedQuizType> = ({
   let rightAnswerLength = result.filter(item => item.status === 'success').length
 
   const redirectToList = () => {
-    navigate('/')
+    navigate('/quiz-list')
   }
 
   return (
