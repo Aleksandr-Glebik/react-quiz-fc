@@ -32,10 +32,10 @@ const initialState: authType = {
 export const authFetch = createAsyncThunk<authType, authArgType>(
     'auth/authFetchStatus',
     async (authData) => {
-        let url = 'https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=AIzaSyCNWp37sXC2QtpleOmY7enr_z5xIjXpgU0'
+        let url = `https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=${process.env.REACT_APP_CLIENT_KEY}`
 
         if (authData.isLogin) {
-            url = 'https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=AIzaSyCNWp37sXC2QtpleOmY7enr_z5xIjXpgU0'
+            url = `https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=${process.env.REACT_APP_CLIENT_KEY}`
         }
 
         const response = await axios.post(url, authData)
